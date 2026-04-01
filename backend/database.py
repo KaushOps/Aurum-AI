@@ -1,10 +1,17 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean, Date
 from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
+import os
 
-DATABASE_URL = "sqlite:///./gold_silver_data.db"
+# Persistent volume check for Docker deployment
+if os.environ.get("DOCKER_ENV") == "1":
+    SQLALCHEMY_DATABASE_URL = "sqlite:////app/data/gold_silver_data.db"
+else:
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./gold_silver_data.db"
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()

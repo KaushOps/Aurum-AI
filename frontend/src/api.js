@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:8000';
+// When running in Vite Dev, target the local backend port.
+// When compiled for Production on Docker/Nginx, relative paths will map using Nginx reverse proxy routing.
+const API_BASE = import.meta.env.PROD ? '' : 'http://localhost:8000';
 
 export async function fetchHistorical(asset, days = 730) {
   try {
